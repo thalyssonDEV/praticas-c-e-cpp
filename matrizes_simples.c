@@ -26,7 +26,8 @@ void criarMatriz(int lin, int col, int **matriz) {
         fprintf(stderr, "\033[1;31mErro: Falha ao Alocar a Memória.\033[0m\n");
         exit(1);
     }
-    
+
+    printf("\n");
     for (int i = 0; i < lin; i++) {
         for (int j = 0; j < col; j++) {
             printf("Elemento [%d][%d] -> ", i, j);
@@ -70,7 +71,8 @@ int main() {
 
     while (true) {
         printf("\nMATRIZ COM VALORES DE 0 A 9\n\n");
-        printf("DIGITE A QUANTIDADE DE LINHAS E COLUNAS DA MATRIZ, RESPECTIVAMENTE E SEPARADAS POR ESPAÇO: ");
+        printf("DIGITE A QUANTIDADE DE LINHAS E COLUNAS DA MATRIZ RESPECTIVAMENTE E SEPARADAS POR ESPAÇO: ");
+        
         scanf("%d %d", &lin, &col);
 
         criarMatriz(lin, col, &matriz);
@@ -79,18 +81,18 @@ int main() {
         
         while (true) {
             menu();
+            printf("\nDigite sua Opção: ");
             scanf("%d", &opcao);
 
             if (opcao == 0) {
                 free(matriz);
                 return 0;
+                
             } else if (opcao == 1) {
                 clearScreen();
                 free(matriz); 
                 break; 
-            } else {
-                printf("Opção inválida! Tente novamente.\n");
-            }
+            } 
         }
     }
     return 0;
