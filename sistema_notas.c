@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define MAX_STRINGS 100
 #define MAX_NOME 50
@@ -28,6 +29,12 @@ void menu(void) {
   printf("[ 3 ] - ATUALIZAR NOTAS PROVA FINAL\n"); // FALTA FAZER TUDO, URGENTEMENTE
   printf("[ 0 ] - SAIR E MOSTRAR O BOLETIM GERAL\n"); // EM PROCESSO
 }
+
+void gerarIdAleatorio() {
+  exit(1);
+}
+
+
 
 void listarAlunosNotas(char nomes[][MAX_NOME], int qtdAlunos, int qtdNotas, float *arrayNotas) {
   int indexGeral = 0;
@@ -56,11 +63,17 @@ void mostrarBoletimGeral(char nomes[][MAX_NOME], float *arrayNotas, float *media
     printf("\033[1;34m%-15s\033[0m", nomes[i]);
 
     for (int j = 0; j < qtdNotas; j++) {
-      printf("\033[1;37m%.1f          \033[0m", arrayNotas[i * qtdNotas + j]);
+      printf("%.1f          ", arrayNotas[i * qtdNotas + j]);
     }
     printf("%.1f        ", medias[i]);
 
-    printf("%s\n", situacoes[i]);
+    if (strcmp(situacoes[i], "APROVADO") == 0) {
+      printf("\033[1;92m%s\033[0m\n", situacoes[i]);
+    } else if (strcmp(situacoes[i], "PROVA FINAL") == 0) {
+      printf("\033[1;93m%s\033[0m\n", situacoes[i]);
+    } else {
+      printf("\033[1;31m%s\033[0m\n", situacoes[i]);
+    }
   }
 
   pauseExecution();
