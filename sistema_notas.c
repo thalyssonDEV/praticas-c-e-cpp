@@ -14,6 +14,7 @@ void pauseExecution(void) {
   getchar();
 }
 
+
 void clearScreen(void) {
 #if defined(_WIN32) || defined(_WIN64)
   system("cls");
@@ -22,11 +23,13 @@ void clearScreen(void) {
 #endif
 }
 
+
 // FALTA ESTILIZAR O MENU
 void menu(void) {
   printf("[ 1 ] - ATUALIZAR NOTAS PROVA FINAL\n"); // FALTA DESIGN
   printf("[ 0 ] - SAIR E MOSTRAR O BOLETIM GERAL\n"); // EM PROCESSO
 }
+
 
 void gerarIdAleatorio() {
   exit(1);
@@ -64,15 +67,15 @@ void mostrarBoletimGeral(char nomes[][MAX_NOME], float *arrayNotas, float *media
     }
 
     if (verificarProvaFinal[i] == 0 && medias[i] >= 7) {
-      printf("\033[1;92m      APROVADO\033[0m\n");
+      printf("\033[1;92m          APROVADO\033[0m\n");
     } else if (verificarProvaFinal[i] == 0 && medias[i] < 4) {
-      printf("\033[1;31m      REPROVADO\033[0m\n");
+      printf("\033[1;31m          REPROVADO\033[0m\n");
     } else if (verificarProvaFinal[i] == 1 && mediasProvaFinal[i] >= 6) {
-      printf("\033[1;92m      APROVADO\033[0m\n");
+      printf("\033[1;92m          APROVADO\033[0m\n");
     } else if (verificarProvaFinal[i] == 1 && mediasProvaFinal[i] < 6) {
-      printf("\033[1;31m      REPROVADO\033[0m\n");
+      printf("\033[1;31m          REPROVADO\033[0m\n");
     } else {
-      printf("\033[1;93m      PROVA FINAL\033[0m\n");
+      printf("\033[1;93m          PROVA FINAL\033[0m\n");
     }
   }
   pauseExecution();
@@ -84,23 +87,13 @@ void calcularSituacoes(float *medias, char situacoes[][20], int qtdAlunos, int *
 
   for (int i = 0; i < qtdAlunos; i++) {
     if (medias[i] >= 7) {
-      sprintf(situacoes[i], "APROVADO");
+      sprintf(situacoes[i], "PROVADOA");
     } else if (medias[i] >= 4) {
       sprintf(situacoes[i], "PROVA FINAL");
       (*qtdAlunosProvaFinal)++;
     } else {
       sprintf(situacoes[i], "REPROVADO");
     }
-  }
-}
-
-
-void alocarMemoriaArrays(int **verificarProvaFinal, int qtdAlunos) {
-  *verificarProvaFinal = calloc(qtdAlunos, sizeof(int));
-
-  if (*verificarProvaFinal == NULL) {
-    fprintf(stderr, "ERRO NA ALOCAÇÃO DE MEMÓRIA");
-    exit(1);
   }
 }
 
@@ -114,13 +107,43 @@ float calcularMedia(float somaNotas, int qtdNotas) {
   return somaNotas / (float)qtdNotas;
 }
 
+
+void alocarMemoriaArrays(int **verificarProvaFinal, float **medias, float **notasProvaFinal, float **mediasProvaFinal, int qtdAlunos) {
+  *verificarProvaFinal = calloc(qtdAlunos, sizeof(int));
+
+  if (*verificarProvaFinal == NULL) {
+    fprintf(stderr, "ERRO NA ALOCAÇÃO DE MEMÓRIA");
+    exit(1);
+  }
+
+  *medias = malloc(qtdAlunos * sizeof(float));
+
+  if (*medias == NULL) {
+    fprintf(stderr, "ERRO NA ALOCAÇÃO DE MEMÓRIA");
+    exit(1);
+  }
+
+  *notasProvaFinal = malloc(qtdAlunos * sizeof(float));
+
+  if (*notasProvaFinal == NULL) {
+    fprintf(stderr, "ERRO NA ALOCAÇÃO DE MEMÓRIA");
+    exit(1);
+  }
+
+  *mediasProvaFinal = malloc(qtdAlunos * sizeof(float));
+
+  if (*mediasProvaFinal == NULL) {
+    fprintf(stderr, "ERRO NA ALOCAÇÃO DE MEMÓRIA");
+    exit(1);
+  }
+}
+
+
 int main() {
   int qtdAlunos, qtdNotas, qtdAlunosProvaFinal = 0, choice;
   float notas, somaNotas;
   char nomes[MAX_STRINGS][MAX_NOME];
-  float medias[MAX_STRINGS];
-  float notasProvaFinal[MAX_STRINGS];
-  float mediasProvaFinal[MAX_STRINGS];  
+  float *medias = NULL, *notasProvaFinal = NULL, *mediasProvaFinal = NULL; 
   char situacoes[MAX_STRINGS][20];
   int *verificarProvaFinal = NULL;
 
@@ -130,7 +153,7 @@ int main() {
   printf("\nDigite Quantos Alunos Deseja Adicionar: ");
   scanf("%d", &qtdAlunos);
 
-  alocarMemoriaArrays(&verificarProvaFinal, qtdAlunos);
+  alocarMemoriaArrays(&verificarProvaFinal, &medias, &notasProvaFinal, &mediasProvaFinal, qtdAlunos);
 
   printf("\nDigite a Quantidade de Notas Por Aluno: ");
   scanf("%d", &qtdNotas);
@@ -168,31 +191,34 @@ int main() {
     clearScreen();
 
     switch (choice) {
-      case 1: {
-        float notaProvaFinal;
+        case 1: {
+            float notaProvaFinal;
   
-        printf("Digite as Notas da Prova Final Dos Alunos\n\n");
+            printf("Digite as Notas da Prova Final Dos Alunos\n\n");
   
-        for (int i = 0; i < qtdAlunos; i++) {
-          if (medias[i] < 7 && medias[i] >= 4 && verificarProvaFinal[i] != 1) {
-            printf("Nota do(a) %s: ", nomes[i]);
-            scanf("%f", &notaProvaFinal);
-            notasProvaFinal[i] = notaProvaFinal;
-            calcularMediaProvaFinal(i, medias, mediasProvaFinal, notaProvaFinal);
-            verificarProvaFinal[i] = 1;
-          }
+            for (int i = 0; i < qtdAlunos; i++) {
+                if (medias[i] < 7 && medias[i] >= 4 && verificarProvaFinal[i] != 1) {
+                    printf("Nota do(a) %s: ", nomes[i]);
+                    scanf("%f", &notaProvaFinal);
+                    notasProvaFinal[i] = notaProvaFinal;
+                    calcularMediaProvaFinal(i, medias, mediasProvaFinal, notaProvaFinal);
+                    verificarProvaFinal[i] = 1;
+                }
+            }
+            pauseExecution();
+            break;
         }
-        pauseExecution();
-  
-        break;
-      }
-  
-        case 0: {
-          calcularSituacoes(medias, situacoes, qtdAlunos, &qtdAlunosProvaFinal, verificarProvaFinal);
-          mostrarBoletimGeral(nomes, arrayNotas, medias, situacoes, qtdAlunos, qtdNotas, &qtdAlunosProvaFinal, notasProvaFinal, mediasProvaFinal, verificarProvaFinal);
-  
-        break;
-      }
-      }
+
+        case 0:
+            calcularSituacoes(medias, situacoes, qtdAlunos, &qtdAlunosProvaFinal, verificarProvaFinal);
+            mostrarBoletimGeral(nomes, arrayNotas, medias, situacoes, qtdAlunos, qtdNotas, &qtdAlunosProvaFinal, notasProvaFinal, mediasProvaFinal, verificarProvaFinal);
+            break;
+        }
     }
+    free(verificarProvaFinal);
+    free(medias);
+    free(notasProvaFinal);
+    free(mediasProvaFinal);
+
+    return 0;
 }
