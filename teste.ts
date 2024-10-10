@@ -3,6 +3,7 @@ import { question } from "readline-sync"
 class BankData {
     public saldo: number;
     public log: string[];
+    private senha: number;
      
     constructor(saldoInicial: number) {
         this.saldo = saldoInicial;
@@ -12,19 +13,19 @@ class BankData {
     mostrarSaldo(): void {
         console.log(`\nSALDO: ${this.saldo}\n`);
         const timestamp = new Date().toLocaleString();
-        this.log.push(`{ Operation Type > Consultation: _> CONSULTA DE SALDO } Value: ${this.saldo} On ${timestamp}`)
+        this.log.push(`{ \x1b[32mOperation Type\x1b[0m > Consultation: _> CONSULTA DE SALDO } Value: ${this.saldo} On ${timestamp}`)
     }
 
     sacar(valorSaque: number): void {
         this.saldo -= valorSaque;
         const timestamp = new Date().toLocaleString();
-        this.log.push(`{ Operation Type > Transaction: _> SAQUE } Value: ${valorSaque} On ${timestamp}`);
+        this.log.push(`{ \x1b[32mOperation Type\x1b[0m > Transaction: _> SAQUE } Value: ${valorSaque} On ${timestamp}`);
     }
 
     depositar(valorDeposito: number): void {
         this.saldo += valorDeposito;
         const timestamp = new Date().toLocaleString();
-        this.log.push(`{ Operation Type > Transaction: _> DEPÓSITO } Value: ${valorDeposito} On ${timestamp}`);
+        this.log.push(`{ \x1b[32mOperation Type\x1b[0m > Transaction: _> DEPÓSITO } Value: ${valorDeposito} On ${timestamp}`);
     }
 
     mostrarLog() {
