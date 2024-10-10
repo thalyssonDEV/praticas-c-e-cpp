@@ -11,17 +11,20 @@ class BankData {
 
     mostrarSaldo(): void {
         console.log(`\nSALDO: ${this.saldo}\n`);
-        this.log.push(`{ Operation Type > Consultation: _> CONSULTA DE SALDO } Value: ${this.saldo} `)
+        const timestamp = new Date().toLocaleString();
+        this.log.push(`{ Operation Type > Consultation: _> CONSULTA DE SALDO } Value: ${this.saldo} On ${timestamp}`)
     }
 
     sacar(valorSaque: number): void {
         this.saldo -= valorSaque;
-        this.log.push(`{ Operation Type > Transaction: _> SAQUE } Value: ${valorSaque} `);
+        const timestamp = new Date().toLocaleString();
+        this.log.push(`{ Operation Type > Transaction: _> SAQUE } Value: ${valorSaque} On ${timestamp}`);
     }
 
     depositar(valorDeposito: number): void {
         this.saldo += valorDeposito;
-        this.log.push(`{ Operation Type > Transaction: _> DEPÓSITO } Value: ${valorDeposito} `);
+        const timestamp = new Date().toLocaleString();
+        this.log.push(`{ Operation Type > Transaction: _> DEPÓSITO } Value: ${valorDeposito} On ${timestamp}`);
     }
 
     mostrarLog() {
